@@ -1,0 +1,35 @@
+module Display_Top (
+    input wire clk_in,
+    input wire reset_key,
+    input wire start_key,
+    output wire [6:0] seg,
+    output wire [5:0] dig
+);
+
+wire [2:0] count_val;
+reg enable = 0;
+reg reset = 0;
+
+always @(posedge clk_in) begin
+    if (start_key) enable <= 1;
+end
+
+always @(posedge clk_in) begin
+    if (reset_key) reset <= 1;
+    else reset <= 0;
+end
+
+Counter3bit U1 (
+    .clk_in(clk_in),
+    .start_btn(enable),
+    .reset_btn(reset),
+    .count(count_val)
+);
+
+Display3bit U2 (
+    .data_in(count_val),
+    .seg_out(seg),
+    .digit_sel(dig)
+);
+
+endmodule
