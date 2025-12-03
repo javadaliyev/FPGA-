@@ -1,0 +1,33 @@
+`timescale 1ns/1ps
+
+module Counter3bit_tb();
+
+    reg clk_in;
+    reg start_btn;
+    reg reset_btn;
+    wire [2:0] count;
+
+    Counter3bit dut (
+        .clk_in(clk_in),
+        .start_btn(start_btn),
+        .reset_btn(reset_btn),
+        .count(count)
+    );
+
+    always #10 clk_in = ~clk_in;
+
+    initial begin
+        clk_in = 0;
+        start_btn = 0;
+        reset_btn = 0;
+
+        #50 reset_btn = 1;
+        #20 reset_btn = 0;
+
+        #20 start_btn = 1;
+
+        #20000;
+
+        $stop;
+    end
+endmodule
