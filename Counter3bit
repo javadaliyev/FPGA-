@@ -1,0 +1,24 @@
+module Counter3bit (
+    input wire clk_in,
+    input wire start_btn,
+    input wire reset_btn,
+    output reg [2:0] count = 0
+);
+
+reg [24:0] slowclk = 0;
+
+always @(posedge clk_in) begin
+    if (reset_btn) begin
+        count <= 0;
+        slowclk <= 0;
+    end
+    else if (start_btn) begin
+        slowclk <= slowclk + 1;
+        if (slowclk == 25'h1FF_FFFF) begin // testbench value(slowclk == 8'hFF), hardware value slowclk == 25'h1FF_FFFF
+            slowclk <= 0;
+            count <= count + 1;
+        end
+    end
+end
+
+endmodule
